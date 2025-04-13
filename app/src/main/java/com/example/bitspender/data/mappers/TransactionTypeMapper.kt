@@ -1,4 +1,4 @@
-package com.example.bitspender.data
+package com.example.bitspender.data.mappers
 
 import com.example.bitspender.data.models.TransactionEntity
 import com.example.bitspender.domain.models.TransactionCategory
