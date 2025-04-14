@@ -11,7 +11,10 @@ import javax.inject.Singleton
 @Singleton
 @Component(
     modules = [
-        NetworkModule::class
+        NetworkModule::class,
+        DatabaseModule::class,
+        DatabaseModule::class,
+        RepositoryModule::class
     ]
 )
 
