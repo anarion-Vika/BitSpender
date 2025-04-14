@@ -14,5 +14,8 @@ interface TransactionDao {
     suspend fun insert(transaction: TransactionEntity)
 
     @Query("SELECT * FROM transactions ORDER BY timestamp DESC")
-    fun getAll(): Flow<List<TransactionEntity>>
+    fun getAllAsFlow(): Flow<List<TransactionEntity>>
+
+    @Query("SELECT * FROM transactions ORDER BY timestamp DESC")
+    fun getAllAsList(): List<TransactionEntity>
 }

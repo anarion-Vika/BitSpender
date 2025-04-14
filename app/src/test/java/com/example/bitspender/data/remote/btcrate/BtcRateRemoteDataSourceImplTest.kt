@@ -15,6 +15,7 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.ResponseBody.Companion.toResponseBody
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.fail
@@ -55,7 +56,7 @@ class BtcRateRemoteDataSourceImplTest {
     }
 
     @Test
-    fun `Test getting BTC rate`() = runBlocking {
+    fun `Testing get BTC rate`() = runBlocking {
         val apiResult = btcRateRemoteDataSourceImpl.getBtcRate()
 
         assertThat(apiResult is ApiResult.Success).isTrue()
@@ -74,7 +75,7 @@ class BtcRateRemoteDataSourceImplTest {
     }
 
     @Test
-    fun `getBtcRate returns Failure on Http error`() = runBlocking {
+    fun `If response code 403, then getBtcRate returns is Failure `() = runBlocking {
         mockWebServer.enqueue(
             MockResponse().setResponseCode(403)
         )
@@ -84,7 +85,7 @@ class BtcRateRemoteDataSourceImplTest {
     }
 
     @Test
-    fun `when api is thrown HttpException with 403 code, then error returns Forbidden`() =
+    fun `If api is thrown HttpException with 403 code, then error returns Forbidden`() =
         runBlocking {
             val exception = HttpException(
                 Response.error<String>(403, "Forbidden".toResponseBody("text/plain".toMediaType()))
@@ -99,7 +100,7 @@ class BtcRateRemoteDataSourceImplTest {
         }
 
     @Test
-    fun `when api is thrown HttpException with 503 code, then error returns ServiceUnavailable`() =
+    fun `If api is thrown HttpException with 503 code, then error returns ServiceUnavailable`() =
         runBlocking {
             val exception = HttpException(
                 Response.error<String>(503, "Service Unavailable".toResponseBody("text/plain".toMediaType()))
@@ -112,7 +113,7 @@ class BtcRateRemoteDataSourceImplTest {
         }
 
     @Test
-    fun `when exception is IOException, then error returns Network`() {
+    fun `If exception is IOException, then returns Network error`() {
         val handler = DefaultErrorHandler()
         val error = handler.handle(IOException("test IOException"))
 
@@ -120,7 +121,7 @@ class BtcRateRemoteDataSourceImplTest {
     }
 
     @Test
-    fun `when api returns 200 with empty body, then result should be Failure with Unknown error`() = runBlocking {
+    fun `If api returns 200 with empty body, then result should be Failure with Unknown error`() = runBlocking {
         mockWebServer.enqueue(
             MockResponse()
                 .setResponseCode(200)
@@ -134,5 +135,10 @@ class BtcRateRemoteDataSourceImplTest {
         val error = (result as ApiResult.Failure).error
         assertThat(error).isInstanceOf(ApiError.Unknown::class.java)
         Unit
+    }
+
+    @AfterEach
+    fun tearDown() {
+        mockWebServer.shutdown()
     }
 }
