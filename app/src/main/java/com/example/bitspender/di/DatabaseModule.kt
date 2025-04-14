@@ -1,4 +1,4 @@
-package com.example.bitspender.di.utils
+package com.example.bitspender.di
 
 import android.content.Context
 import androidx.room.Room
