@@ -17,7 +17,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import java.util.concurrent.TimeUnit
 
 @Module
-class NetworkModule {
+object NetworkModule {
 
     private val BASE_URL = BuildConfig.BASE_URL
 
