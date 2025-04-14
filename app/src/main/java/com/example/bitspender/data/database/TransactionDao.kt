@@ -1,4 +1,4 @@
-package com.example.bitspender.data.local
+package com.example.bitspender.data.database
 
 import androidx.room.Dao
 import androidx.room.Insert
@@ -14,5 +14,5 @@ interface TransactionDao {
     suspend fun insert(transaction: TransactionEntity)
 
     @Query("SELECT * FROM transactions ORDER BY timestamp DESC")
-    suspend fun getAll(): Flow<List<TransactionEntity>>
+    fun getAll(): Flow<List<TransactionEntity>>
 }

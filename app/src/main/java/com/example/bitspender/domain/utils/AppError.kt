@@ -8,4 +8,5 @@ sealed class AppError {
     data class ServiceUnavailable(val code: Int, val message: String) : AppError()
     data class GatewayTimeout(val code: Int, val message: String) : AppError()
     data class Http(val code: Int, val message: String) : AppError()
+    data class LocalError(val message: String?) : AppError()
 }

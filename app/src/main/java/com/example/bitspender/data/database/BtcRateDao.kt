@@ -1,4 +1,4 @@
-package com.example.bitspender.data.local
+package com.example.bitspender.data.database
 
 import androidx.room.Dao
 import androidx.room.Insert
