@@ -30,7 +30,9 @@ class TransactionRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getBalance(): Flow<Double> {
-        return localDataSource.getBalance()
+    override fun getTransactionsList(): List<TransactionModel> {
+        return localDataSource.getAllTransactionList()
+            .map { transaction -> transaction.toDomainModel() }
     }
+
 }

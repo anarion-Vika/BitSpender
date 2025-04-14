@@ -10,5 +10,5 @@ interface TransactionRepository {
 
     fun getTransactions(): Flow<List<TransactionModel>>
 
-    fun getBalance(): Flow<Double>
+    fun getTransactionsList(): List<TransactionModel>
 }
