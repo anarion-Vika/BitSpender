@@ -56,19 +56,26 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.jetbrains.annotations)
+
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.room.compiler)
-    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+
     implementation(libs.androidx.paging.common.android)
+
     implementation(libs.retrofit)
     implementation(libs.retrofit.moshi)
     implementation(libs.okhttp)
     implementation(libs.okhttp.logging)
     implementation(libs.moshi)
     implementation(libs.moshi.kotlin)
-    implementation(libs.jetbrains.annotations)
+
+    implementation(libs.dagger.android)
+    implementation(libs.dagger.android.support)
     implementation(libs.dagger)
+    implementation(libs.dagger.android.processor)
     kapt(libs.dagger.compiler)
 
     testImplementation(libs.junit)
