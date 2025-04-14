@@ -13,12 +13,12 @@ class DefaultErrorHandler @Inject constructor() : ErrorHandler {
             ApiError.Network
         }
         is IOException -> ApiError.Network
-        is HttpException -> ApiError.Http(throwable.code(), throwable.message())
+        is HttpException -> handleHttpException(throwable)
         else -> ApiError.Unknown(throwable)
     }
 
-    private fun handleHttpException(httpException: HttpException) {
-        when (val code = httpException.code()) {
+    private fun handleHttpException(httpException: HttpException): ApiError {
+        return when (val code = httpException.code()) {
             403 -> ApiError.Forbidden(code, httpException.message ?: "Http error")
             502 -> ApiError.BadGateway(code, httpException.message ?: "Http error")
             503 -> ApiError.ServiceUnavailable(code, httpException.message ?: "Http error")

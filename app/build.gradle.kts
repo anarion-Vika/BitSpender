@@ -47,6 +47,15 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+
+    packaging {
+        resources {
+            excludes += "META-INF/LICENSE.txt"
+            excludes += "META-INF/gradle/incremental.annotation.processors"
+            excludes += "META-INF/androidx/room/**"
+        }
+    }
+
 }
 
 dependencies {
@@ -85,4 +94,8 @@ dependencies {
     testImplementation(libs.mockk)
     testImplementation(libs.mockwebserver)
     androidTestImplementation(libs.androidx.espresso.core)
+}
+
+tasks.withType<Test> {
+    useJUnitPlatform()
 }

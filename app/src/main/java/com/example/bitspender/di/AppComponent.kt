@@ -5,6 +5,7 @@ import android.content.Context
 import com.example.bitspender.presentation.BitSpenderApp
 import dagger.BindsInstance
 import dagger.Component
+import dagger.android.support.AndroidSupportInjectionModule
 import javax.inject.Singleton
 
 
@@ -14,7 +15,8 @@ import javax.inject.Singleton
         NetworkModule::class,
         DatabaseModule::class,
         DatabaseModule::class,
-        RepositoryModule::class
+        RepositoryModule::class,
+        AndroidSupportInjectionModule::class
     ]
 )
 

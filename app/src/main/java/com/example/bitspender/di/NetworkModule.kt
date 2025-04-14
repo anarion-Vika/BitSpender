@@ -46,13 +46,11 @@ object NetworkModule {
     @Singleton
     fun provideRetrofit(
         moshi: Moshi,
-        okHttpClient: OkHttpClient,
-        errorHandler: ErrorHandler
+        okHttpClient: OkHttpClient
     ): Retrofit =
         Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
-            .addCallAdapterFactory(ApiResponseCallAdapterFactory(errorHandler))
             .client(okHttpClient)
             .build()
 
