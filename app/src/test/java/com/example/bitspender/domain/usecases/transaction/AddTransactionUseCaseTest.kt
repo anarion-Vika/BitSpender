@@ -4,6 +4,7 @@ import assertk.assertThat
 import assertk.assertions.contains
 import assertk.assertions.isEqualTo
 import assertk.assertions.isInstanceOf
+import com.example.bitspender.data.local.transactions.transactionModel
 import com.example.bitspender.data.repositoryimpl.TransactionRepositoryImplFake
 import com.example.bitspender.domain.models.TransactionCategory
 import com.example.bitspender.domain.models.TransactionModel
@@ -54,19 +55,9 @@ class AddTransactionUseCaseTest {
 
     @Test
     fun `If balance is enough then add expense transaction`() = runBlocking {
-        val income = TransactionModel(
-            1,
-            100.0,
-            TransactionType.INCOME,
-            TransactionCategory.OTHER,
-            System.currentTimeMillis()
-        )
-        val expense = TransactionModel(
-            2,
-            30.0,
-            TransactionType.EXPENSE,
-            TransactionCategory.OTHER,
-            System.currentTimeMillis()
+        val income = transactionModel(1)
+        val expense = transactionModel(2).copy(
+            transactionType = TransactionType.EXPENSE
         )
 
         repository.addTransaction(income)
@@ -79,34 +70,29 @@ class AddTransactionUseCaseTest {
     }
 
     @Test
-    fun `If expense is more than balance then return error InsufficientFunds with correct details`() = runBlocking {
-        val income = TransactionModel(
-            1,
-            80.0,
-            TransactionType.INCOME,
-            TransactionCategory.OTHER,
-            System.currentTimeMillis()
-        )
+    fun `If expense is more than balance then return error InsufficientFunds with correct details`() =
+        runBlocking {
 
-        val expense = TransactionModel(
-            2,
-            100.0,
-            TransactionType.EXPENSE,
-            TransactionCategory.OTHER,
-            System.currentTimeMillis()
-        )
+            val income = transactionModel(1).copy(
+                transactionType = TransactionType.INCOME,
+                transactionAmount = 80.0
+            )
 
+            val expense = transactionModel(2).copy(
+                transactionType = TransactionType.EXPENSE,
+                transactionAmount = 100.0
+            )
 
-        useCase(income)
+            useCase(income)
 
-        val resultAfterTryToAddExpense = useCase(expense)
+            val resultAfterTryToAddExpense = useCase(expense)
 
-        val error = (resultAfterTryToAddExpense as AppResult.Error).error
-        assertThat(error).isInstanceOf(AppError.InsufficientFunds::class.java)
+            val error = (resultAfterTryToAddExpense as AppResult.Error).error
+            assertThat(error).isInstanceOf(AppError.InsufficientFunds::class.java)
 
-        val insufficientFundsError = error as AppError.InsufficientFunds
-        assertThat(insufficientFundsError.current).isEqualTo(80.0)
-        assertThat(insufficientFundsError.required).isEqualTo(100.0)
+            val insufficientFundsError = error as AppError.InsufficientFunds
+            assertThat(insufficientFundsError.current).isEqualTo(80.0)
+            assertThat(insufficientFundsError.required).isEqualTo(100.0)
 
-    }
+        }
 }
