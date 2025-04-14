@@ -2,9 +2,9 @@ package com.example.bitspender.di
 
 import android.content.Context
 import androidx.room.Room
-import com.example.bitspender.data.local.BtcRateDao
-import com.example.bitspender.data.local.TransactionDao
-import com.example.bitspender.data.local.WalletDatabase
+import com.example.bitspender.data.database.BtcRateDao
+import com.example.bitspender.data.database.TransactionDao
+import com.example.bitspender.data.database.WalletDatabase
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton

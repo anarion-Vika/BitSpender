@@ -27,14 +27,14 @@ fun TransactionModel.toEntity(): TransactionEntity {
     return transactionModel
 }
 
-private fun String.toTransactionType(): TransactionType =
+fun String.toTransactionType(): TransactionType =
     try {
         TransactionType.valueOf(this.uppercase())
     } catch (e: IllegalArgumentException) {
         throw IllegalArgumentException("Invalid transaction type: $this")
     }
 
-private fun String.toTransactionCategory(): TransactionCategory =
+fun String.toTransactionCategory(): TransactionCategory =
     try {
         TransactionCategory.valueOf(this.uppercase())
     } catch (e: IllegalArgumentException) {
