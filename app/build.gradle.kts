@@ -76,6 +76,7 @@ dependencies {
     implementation(libs.androidx.room.compiler)
 
     implementation(libs.androidx.paging.common.android)
+    implementation(libs.paging.runtime)
 
     implementation(libs.retrofit)
     implementation(libs.retrofit.moshi)

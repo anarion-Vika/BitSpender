@@ -42,6 +42,7 @@ androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "
 
 #paging
 androidx-paging-common-android = { group = "androidx.paging", name = "paging-common-android", version.ref = "pagingCommonAndroid" }
+paging-runtime = { module = "androidx.paging:paging-runtime", version.ref = "pagingCommonAndroid" }
 
 #network
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
