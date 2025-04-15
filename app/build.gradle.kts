@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.androidx.navigation.safeargs)
 }
 
 android {
@@ -21,6 +22,8 @@ android {
 
     buildFeatures {
         buildConfig = true
+        viewBinding = true
+        dataBinding = true
     }
 
     buildTypes {
@@ -85,7 +88,11 @@ dependencies {
     implementation(libs.dagger.android.support)
     implementation(libs.dagger)
     implementation(libs.dagger.android.processor)
+    implementation(libs.androidx.databinding.runtime)
     kapt(libs.dagger.compiler)
+
+    implementation(libs.androidx.navigation.ui.ktx)
+    implementation(libs.androidx.navigation.fragment.ktx)
 
     testImplementation(libs.junit.jupiter.api)
     testRuntimeOnly(libs.junit.jupiter.engine)

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/transactionsFragment">
+
+    <fragment
+        android:id="@+id/transactionsFragment"
+        android:name="com.example.bitspender.presentation.transaction.MainTransactionFragment"
+        android:label="Transactions"
+        tools:layout="@layout/fragment_main_transaction">
+        <action
+            android:id="@+id/action_transactionsFragment_to_addTransactionFragment"
+            app:destination="@id/addTransactionFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/addTransactionFragment"
+        android:name="com.example.bitspender.presentation.addtransaction.AddTransactionFragment"
+        android:label="Add Transaction"
+        tools:layout="@layout/fragment_add_transaction" />
+</navigation>
