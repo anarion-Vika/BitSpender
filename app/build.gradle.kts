@@ -47,6 +47,15 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+
+    packaging {
+        resources {
+            excludes += "META-INF/LICENSE.txt"
+            excludes += "META-INF/gradle/incremental.annotation.processors"
+            excludes += "META-INF/androidx/room/**"
+        }
+    }
+
 }
 
 dependencies {
@@ -78,7 +87,17 @@ dependencies {
     implementation(libs.dagger.android.processor)
     kapt(libs.dagger.compiler)
 
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
+    testImplementation(libs.junit.jupiter.api)
+    testRuntimeOnly(libs.junit.jupiter.engine)
+    testImplementation(libs.junit.jupiter.params)
+    testImplementation(libs.turbine)
+    testImplementation(libs.coroutines.test)
+    testImplementation(libs.assertk)
+    testImplementation(libs.mockk)
+    testImplementation(libs.mockwebserver)
     androidTestImplementation(libs.androidx.espresso.core)
+}
+
+tasks.withType<Test> {
+    useJUnitPlatform()
 }
