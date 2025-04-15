@@ -19,7 +19,7 @@ class TransactionDaoFake : TransactionDao {
         return flowOf(transactions)
     }
 
-    override fun getAllAsList(): List<TransactionEntity> {
+    override suspend fun getAllAsList(): List<TransactionEntity> {
         return transactions
     }
 

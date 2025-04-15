@@ -33,7 +33,7 @@ class TransactionRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getTransactionsList(): List<TransactionModel> {
+    override suspend fun getTransactionsList(): List<TransactionModel> {
         return localDataSource.getAllTransactionList()
             .map { transaction -> transaction.toDomainModel() }
     }

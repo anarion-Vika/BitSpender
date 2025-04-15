@@ -18,7 +18,7 @@ interface TransactionDao {
     fun getAllAsFlow(): Flow<List<TransactionEntity>>
 
     @Query("SELECT * FROM transactions ORDER BY timestamp DESC")
-    fun getAllAsList(): List<TransactionEntity>
+    suspend fun getAllAsList(): List<TransactionEntity>
 
     @Query("SELECT * FROM transactions ORDER BY timestamp DESC")
     fun getPagedTransaction(): PagingSource<Int, TransactionEntity>

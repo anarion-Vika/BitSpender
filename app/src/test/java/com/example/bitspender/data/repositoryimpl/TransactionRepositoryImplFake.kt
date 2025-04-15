@@ -21,7 +21,7 @@ class TransactionRepositoryImplFake : TransactionRepository {
         return flowOf(transactions)
     }
 
-    override fun getTransactionsList(): List<TransactionModel> {
+    override suspend fun getTransactionsList(): List<TransactionModel> {
         return transactions
     }
 

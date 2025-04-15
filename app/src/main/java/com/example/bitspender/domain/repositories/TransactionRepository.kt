@@ -11,7 +11,7 @@ interface TransactionRepository {
 
     fun getTransactions(): Flow<List<TransactionModel>>
 
-    fun getTransactionsList(): List<TransactionModel>
+    suspend fun getTransactionsList(): List<TransactionModel>
 
     fun getPagingTransaction(): PagingSource<Int, TransactionModel>
 }

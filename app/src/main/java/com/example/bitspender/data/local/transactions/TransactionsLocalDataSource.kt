@@ -8,7 +8,7 @@ interface TransactionsLocalDataSource {
 
     fun getAllTransaction(): Flow<List<TransactionEntity>>
 
-    fun getAllTransactionList(): List<TransactionEntity>
+    suspend fun getAllTransactionList(): List<TransactionEntity>
 
     suspend fun addTransaction(transaction: TransactionEntity)
 
