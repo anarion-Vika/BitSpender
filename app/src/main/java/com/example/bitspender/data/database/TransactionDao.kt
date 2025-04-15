@@ -1,5 +1,6 @@
 package com.example.bitspender.data.database
 
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -18,4 +19,8 @@ interface TransactionDao {
 
     @Query("SELECT * FROM transactions ORDER BY timestamp DESC")
     fun getAllAsList(): List<TransactionEntity>
+
+    @Query("SELECT * FROM transactions ORDER BY timestamp DESC")
+    fun getPagedTransaction(): PagingSource<Int, TransactionEntity>
+
 }

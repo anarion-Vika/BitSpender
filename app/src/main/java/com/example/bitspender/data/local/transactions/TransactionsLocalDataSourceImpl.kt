@@ -1,5 +1,6 @@
 package com.example.bitspender.data.local.transactions
 
+import androidx.paging.PagingSource
 import com.example.bitspender.data.database.TransactionDao
 import com.example.bitspender.data.models.TransactionEntity
 import kotlinx.coroutines.flow.Flow
@@ -19,6 +20,10 @@ class TransactionsLocalDataSourceImpl @Inject constructor(
 
     override fun getAllTransactionList(): List<TransactionEntity> {
         return transactionDao.getAllAsList()
+    }
+
+    override fun getPagingTransaction(): PagingSource<Int, TransactionEntity> {
+        return transactionDao.getPagedTransaction()
     }
 
 }
