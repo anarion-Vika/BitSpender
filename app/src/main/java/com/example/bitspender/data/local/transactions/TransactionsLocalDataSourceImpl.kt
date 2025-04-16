@@ -26,4 +26,15 @@ class TransactionsLocalDataSourceImpl @Inject constructor(
         return transactionDao.getPagedTransaction()
     }
 
+    override suspend fun getTransactionsPage(
+        limit: Int,
+        offset: Int
+    ): List<TransactionEntity>{
+        return transactionDao.getTransactionsPage(limit, offset)
+    }
+
+    override suspend fun getTotalCount(): Int {
+        return transactionDao.getTotalCount()
+    }
+
 }

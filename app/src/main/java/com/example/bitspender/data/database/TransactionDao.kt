@@ -23,4 +23,10 @@ interface TransactionDao {
     @Query("SELECT * FROM transactions ORDER BY timestamp DESC")
     fun getPagedTransaction(): PagingSource<Int, TransactionEntity>
 
+    @Query("SELECT * FROM transactions ORDER BY timestamp DESC LIMIT :limit OFFSET :offset")
+    suspend fun getTransactionsPage(limit: Int, offset: Int): List<TransactionEntity>
+
+    @Query("SELECT COUNT(*) FROM transactions")
+    suspend fun getTotalCount(): Int
+
 }

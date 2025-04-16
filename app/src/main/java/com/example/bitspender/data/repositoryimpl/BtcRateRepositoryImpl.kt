@@ -9,10 +9,10 @@ import com.example.bitspender.data.remote.btcrate.BtcRateRemoteDataSource
 import com.example.bitspender.data.remote.errorhandling.ApiResult
 import com.example.bitspender.domain.models.BtcRateModel
 import com.example.bitspender.domain.repositories.BtcRateRepository
-import kotlinx.coroutines.flow.Flow
-import javax.inject.Inject
 import com.example.bitspender.domain.utils.AppResult
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
 class BtcRateRepositoryImpl @Inject constructor(
     private val remoteDataSource: BtcRateRemoteDataSource,
