@@ -13,3 +13,7 @@ fun Date.formatDateToUi(): String {
     val sdf = SimpleDateFormat("dd MMMM", Locale.getDefault())
     return sdf.format(this)
 }
+fun Date.formatTimeToUi(): String {
+    val sdf = SimpleDateFormat("HH:mm", Locale.getDefault())
+    return sdf.format(this)
+}
