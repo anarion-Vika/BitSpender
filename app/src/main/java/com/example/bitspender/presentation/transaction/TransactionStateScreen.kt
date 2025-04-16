@@ -4,10 +4,11 @@ data class TransactionScreenState(
     var isLoading: Boolean = false,
     var isAddTransactionEnabled: Boolean = false,
     var btcRateState: String = "--",
-    var currentBalance: Double = 0.0
+    var currentBalance: Double = 0.0,
+    var error: TransactionError = TransactionError()
 )
 
-sealed interface TransactionScreenEvent {
-
-
-}
+data class TransactionError(
+    var isError: Boolean = false,
+    var textError: String = ""
+)

@@ -13,6 +13,7 @@ import com.example.bitspender.domain.usecases.btcrate.UpdateBtcRateUseCase
 import com.example.bitspender.domain.usecases.transaction.GetBalanceUseCase
 import com.example.bitspender.domain.usecases.transaction.GetPagingTransactionsUseCase
 import com.example.bitspender.domain.utils.AppResult
+import com.example.bitspender.presentation.base.BaseViewModel
 import com.example.bitspender.presentation.transaction.adapter.TransactionUiItem
 import com.example.bitspender.presentation.utils.formatDateToUi
 import com.example.bitspender.presentation.utils.toLocalDate
@@ -35,7 +36,7 @@ class MainTransactionViewModel @Inject constructor(
     private val getBalanceUseCase: GetBalanceUseCase,
     private val getPagingTransactionsUseCase: GetPagingTransactionsUseCase,
     private val updateBtcRateUseCase: UpdateBtcRateUseCase,
-) : ViewModel() {
+) : BaseViewModel() {
 
     private val _uiStateFlow = MutableStateFlow(TransactionScreenState(isLoading = true))
     val uiStateFlow
@@ -77,11 +78,21 @@ class MainTransactionViewModel @Inject constructor(
 
     private fun getBtcRate() {
         viewModelScope.launch {
-        val result =     updateBtcRateUseCase()
-            when (result){
-                is AppResult.Success->{}
-                is AppResult.Error->{
+            val result = updateBtcRateUseCase()
+            when (result) {
+                is AppResult.Success -> {
+                    Unit
+                }
 
+                is AppResult.Error -> {
+                    _uiStateFlow.update {
+                        it.copy(
+                            error = TransactionError(
+                                isError = true,
+                                textError = result.error.toUserMessage()
+                            )
+                        )
+                    }
                 }
             }
 

@@ -1,6 +1,5 @@
 package com.example.bitspender.presentation.addtransaction
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.bitspender.domain.models.TransactionCategory
 import com.example.bitspender.domain.models.TransactionModel
@@ -8,6 +7,7 @@ import com.example.bitspender.domain.models.TransactionType
 import com.example.bitspender.domain.usecases.transaction.AddTransactionUseCase
 import com.example.bitspender.domain.utils.AppError
 import com.example.bitspender.domain.utils.AppResult
+import com.example.bitspender.presentation.base.BaseViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 class AddTransactionViewModel @Inject constructor(
     private val addTransactionUseCase: AddTransactionUseCase
-) : ViewModel() {
+) : BaseViewModel() {
 
     private val _uiStateFlow = MutableStateFlow(AddTransactionStateScreen(isLoading = true))
     val uiStateFlow
@@ -44,38 +44,19 @@ class AddTransactionViewModel @Inject constructor(
                 }
 
                 is AppResult.Error -> {
+                    _uiStateFlow.update {
+                        it.copy(
+                            error = AddTransactionError(
+                                isError = true,
+                                textError = result.error.toUserMessage()
+                            )
+                        )
 
-                    when (result.error) {
-
-                        is AppError.InsufficientFunds -> {
-                            val errorInfo = result.error
-                            _uiStateFlow.update {
-                                it.copy(
-                                    error = AddTransactionError(
-                                        isError = true,
-                                        textError = "На вашому балансі недостатньо BTC. Ваш баланс: ${errorInfo.current}, необхідно: ${errorInfo.required}"
-                                    )
-                                )
-                            }
-                        }
-
-                        else -> {
-                            _uiStateFlow.update {
-                                it.copy(
-                                    error = AddTransactionError(
-                                        isError = true,
-                                        textError = result.error.toString()
-                                    )
-                                )
-                            }
-                        }
                     }
-
                 }
+
             }
-
         }
-
     }
 
     companion object {

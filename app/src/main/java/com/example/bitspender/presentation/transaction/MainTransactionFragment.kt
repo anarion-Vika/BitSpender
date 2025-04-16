@@ -2,6 +2,7 @@ package com.example.bitspender.presentation.transaction
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -101,7 +102,9 @@ class MainTransactionFragment : BaseFragment<FragmentMainTransactionBinding>(), 
         binding.btnAddTransaction.isEnabled = state.isAddTransactionEnabled
         binding.tvBalance.text = state.currentBalance.toString()
         binding.tvBtcRate.text = state.btcRateState
-
+        if (state.error.isError) {
+            Toast.makeText(requireContext(), state.error.textError, Toast.LENGTH_SHORT).show()
+        }
     }
 
     companion object {
