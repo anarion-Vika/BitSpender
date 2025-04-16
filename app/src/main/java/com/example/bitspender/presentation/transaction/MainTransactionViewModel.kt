@@ -12,6 +12,7 @@ import com.example.bitspender.domain.usecases.btcrate.GetBtcRateUseCase
 import com.example.bitspender.domain.usecases.btcrate.UpdateBtcRateUseCase
 import com.example.bitspender.domain.usecases.transaction.GetBalanceUseCase
 import com.example.bitspender.domain.usecases.transaction.GetPagingTransactionsUseCase
+import com.example.bitspender.domain.utils.AppResult
 import com.example.bitspender.presentation.transaction.adapter.TransactionUiItem
 import com.example.bitspender.presentation.utils.formatDateToUi
 import com.example.bitspender.presentation.utils.toLocalDate
@@ -23,7 +24,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -45,7 +45,6 @@ class MainTransactionViewModel @Inject constructor(
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val transactions: StateFlow<PagingData<TransactionUiItem>> = refreshTrigger
-        .onStart { emit(Unit) }
         .flatMapLatest {
             getPagingTransactionsUseCase(PAGE_SIZE)
                 .map(::mapPagingData)
@@ -60,6 +59,7 @@ class MainTransactionViewModel @Inject constructor(
     init {
         getBalance()
         getBtcRate()
+        refreshPaging()
     }
 
     private fun getBalance() {
@@ -77,7 +77,13 @@ class MainTransactionViewModel @Inject constructor(
 
     private fun getBtcRate() {
         viewModelScope.launch {
-            updateBtcRateUseCase()
+        val result =     updateBtcRateUseCase()
+            when (result){
+                is AppResult.Success->{}
+                is AppResult.Error->{
+
+                }
+            }
 
             getBtcRateUseCase().collect { newBalance ->
                 _uiStateFlow.update {
