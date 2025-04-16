@@ -21,11 +21,10 @@ class TransactionRepositoryImplFake : TransactionRepository {
         return flowOf(transactions)
     }
 
-    override fun getTransactionsList(): List<TransactionModel> {
+    override suspend fun getTransactionsList(): List<TransactionModel> {
         return transactions
     }
-
-    override fun getPagingTransaction(): PagingSource<Int, TransactionModel> {
+    override fun getPagingTransaction(pageSize: Int): PagingSource<Int, TransactionModel> {
         return object : PagingSource<Int, TransactionModel>() {
             override suspend fun load(params: LoadParams<Int>): LoadResult<Int, TransactionModel> {
                 val page = params.key ?: 0

@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import com.example.bitspender.di.utils.ViewModelKey
 import com.example.bitspender.presentation.addtransaction.AddTransactionViewModel
 import com.example.bitspender.presentation.transaction.MainTransactionViewModel
+import com.example.bitspender.presentation.transaction.replenishbalance.ReplenishBalanceViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
@@ -20,5 +21,10 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(AddTransactionViewModel::class)
     abstract fun bindAddTransactionViewModel(viewModel: AddTransactionViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(ReplenishBalanceViewModel::class)
+    abstract fun bindReplenishBalanceViewModel(viewModel: ReplenishBalanceViewModel): ViewModel
 
 }

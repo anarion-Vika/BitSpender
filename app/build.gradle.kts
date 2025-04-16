@@ -53,9 +53,9 @@ android {
 
     packaging {
         resources {
-            excludes += "META-INF/LICENSE.txt"
             excludes += "META-INF/gradle/incremental.annotation.processors"
-            excludes += "META-INF/androidx/room/**"
+            excludes += "META-INF/LICENSE.txt"
+            excludes += "META-INF/androidx/room/room-compiler-processing/LICENSE.txt"
         }
     }
 
@@ -71,11 +71,12 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.jetbrains.annotations)
 
-    implementation(libs.androidx.room.runtime)
-    implementation(libs.androidx.room.ktx)
-    implementation(libs.androidx.room.compiler)
+    implementation(libs.room.ktx)
+    implementation(libs.room.paging)
+    annotationProcessor(libs.room.compiler)
 
     implementation(libs.androidx.paging.common.android)
+    implementation(libs.paging.runtime)
 
     implementation(libs.retrofit)
     implementation(libs.retrofit.moshi)

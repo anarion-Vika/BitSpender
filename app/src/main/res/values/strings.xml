@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">BitSpender</string>
+    <string name="replenish">replenish</string>
+    <string name="your_current_balance">Your current balance</string>
+    <string name="current_btc_rate">BTC rate</string>
+    <string name="add_transaction">Add transaction</string>
+    <string name="transaction_amount_format">%.2f BTC</string>
+    <string name="transaction_amount">Transaction amount</string>
+    <string name="hint_replenish_amount">Replenish amount</string>
+    <string name="title_replenish_your_balance">Replenish your balance</string>
+
 </resources>

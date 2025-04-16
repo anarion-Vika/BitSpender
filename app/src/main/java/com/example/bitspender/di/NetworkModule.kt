@@ -2,7 +2,6 @@ package com.example.bitspender.di
 
 import com.example.bitspender.BuildConfig
 import com.example.bitspender.data.remote.BtcRateApi
-import com.example.bitspender.data.remote.errorhandling.ApiResponseCallAdapterFactory
 import com.example.bitspender.data.remote.errorhandling.DefaultErrorHandler
 import com.example.bitspender.data.remote.errorhandling.ErrorHandler
 import dagger.Module
@@ -23,7 +22,7 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideErrorHandler(): DefaultErrorHandler = DefaultErrorHandler()
+    fun provideErrorHandler(): ErrorHandler = DefaultErrorHandler()
 
     @Provides
     @Singleton

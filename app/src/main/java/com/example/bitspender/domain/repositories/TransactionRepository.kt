@@ -2,8 +2,8 @@ package com.example.bitspender.domain.repositories
 
 import androidx.paging.PagingSource
 import com.example.bitspender.domain.models.TransactionModel
-import kotlinx.coroutines.flow.Flow
 import com.example.bitspender.domain.utils.AppResult
+import kotlinx.coroutines.flow.Flow
 
 interface TransactionRepository {
 
@@ -11,7 +11,7 @@ interface TransactionRepository {
 
     fun getTransactions(): Flow<List<TransactionModel>>
 
-    fun getTransactionsList(): List<TransactionModel>
+    suspend fun getTransactionsList(): List<TransactionModel>
 
-    fun getPagingTransaction(): PagingSource<Int, TransactionModel>
+    fun getPagingTransaction(pageSize: Int): PagingSource<Int, TransactionModel>
 }

@@ -18,12 +18,19 @@ class TransactionsLocalDataSourceImpl @Inject constructor(
         return transactionDao.getAllAsFlow()
     }
 
-    override fun getAllTransactionList(): List<TransactionEntity> {
+    override suspend fun getAllTransactionList(): List<TransactionEntity> {
         return transactionDao.getAllAsList()
     }
 
-    override fun getPagingTransaction(): PagingSource<Int, TransactionEntity> {
-        return transactionDao.getPagedTransaction()
+    override suspend fun getTransactionsPage(
+        limit: Int,
+        offset: Int
+    ): List<TransactionEntity>{
+        return transactionDao.getTransactionsPage(limit, offset)
+    }
+
+    override suspend fun getTotalCount(): Int {
+        return transactionDao.getTotalCount()
     }
 
 }
