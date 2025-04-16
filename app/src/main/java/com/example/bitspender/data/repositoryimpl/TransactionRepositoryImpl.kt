@@ -38,8 +38,8 @@ class TransactionRepositoryImpl @Inject constructor(
             .map { transaction -> transaction.toDomainModel() }
     }
 
-    override fun getPagingTransaction(): PagingSource<Int, TransactionEntity> {
-        return TransactionPagingSource(localDataSource)
+    override fun getPagingTransaction(pageSize:Int): PagingSource<Int, TransactionEntity> {
+        return TransactionPagingSource(localDataSource, pageSize)
     }
 
 }

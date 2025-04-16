@@ -7,8 +7,7 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.insertSeparators
 import androidx.paging.map
-import com.example.bitspender.data.mappers.toDomainModel
-import com.example.bitspender.data.models.TransactionEntity
+import com.example.bitspender.domain.models.TransactionModel
 import com.example.bitspender.domain.usecases.btcrate.GetBtcRateUseCase
 import com.example.bitspender.domain.usecases.btcrate.UpdateBtcRateUseCase
 import com.example.bitspender.domain.usecases.transaction.GetBalanceUseCase
@@ -16,7 +15,7 @@ import com.example.bitspender.domain.usecases.transaction.GetPagingTransactionsU
 import com.example.bitspender.presentation.transaction.adapter.TransactionUiItem
 import com.example.bitspender.presentation.utils.formatDateToUi
 import com.example.bitspender.presentation.utils.toLocalDate
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -48,6 +47,8 @@ class MainTransactionViewModel @Inject constructor(
     val sideEffectFlow
         get() = _sideEffectFlow.asSharedFlow()
 
+    private val refreshTrigger = MutableSharedFlow<Unit>(replay = 1)
+
     init {
         getBalance()
         getBtcRate()
@@ -70,7 +71,6 @@ class MainTransactionViewModel @Inject constructor(
         viewModelScope.launch {
             updateBtcRateUseCase()
 
-
             getBtcRateUseCase().collect { newBalance ->
                 _uiStateFlow.update {
                     it.copy(btcRateState = newBalance?.rate.toString())
@@ -79,23 +79,20 @@ class MainTransactionViewModel @Inject constructor(
         }
     }
 
-
-
-
-
-
-    private val refreshTrigger = MutableSharedFlow<Unit>(replay = 1)
-
-    val transactions3: StateFlow<PagingData<TransactionUiItem>> = refreshTrigger
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val transactions: StateFlow<PagingData<TransactionUiItem>> = refreshTrigger
         .onStart { emit(Unit) }
         .flatMapLatest {
-            getPagingTransactionsUseCase()
-                .map { pagingData ->
-                    mapPagingData(pagingData)
-                }
+            getPagingTransactionsUseCase(PAGE_SIZE)
+                .map(::mapPagingData)
                 .cachedIn(viewModelScope)
         }
-        .stateIn(viewModelScope, SharingStarted.Lazily, PagingData.empty())
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.Lazily,
+            initialValue = PagingData.empty()
+        )
+
 
     fun refreshPaging() {
         viewModelScope.launch {
@@ -103,22 +100,12 @@ class MainTransactionViewModel @Inject constructor(
         }
     }
 
-
-
-
-    val transactions: Flow<PagingData<TransactionUiItem>> =
-        getPagingTransactionsUseCase()
-            .map { pagingData ->
-                mapPagingData(pagingData)
-            }
-            .cachedIn(viewModelScope)
-
-
-    private fun mapPagingData(pagingData: PagingData<TransactionEntity>): PagingData<TransactionUiItem> {
+    private fun mapPagingData(pagingData: PagingData<TransactionModel>): PagingData<TransactionUiItem> {
         return pagingData
             .map {
                 Log.d("anarion", it.toString())
-                TransactionUiItem.TransactionItem(it.toDomainModel()) }
+                TransactionUiItem.TransactionItem(it)
+            }
             .insertSeparators { before, after ->
                 val beforeDate = before?.transaction?.timestamp?.toLocalDate()?.formatDateToUi()
                 val afterDate = after?.transaction?.timestamp?.toLocalDate()?.formatDateToUi()

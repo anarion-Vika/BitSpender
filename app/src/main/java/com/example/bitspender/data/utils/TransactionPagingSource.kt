@@ -7,13 +7,14 @@ import com.example.bitspender.data.models.TransactionEntity
 import javax.inject.Inject
 
 class TransactionPagingSource @Inject constructor(
-    private val localDataSource: TransactionsLocalDataSource
+    private val localDataSource: TransactionsLocalDataSource,
+    private val pageSize:Int
 ) : PagingSource<Int, TransactionEntity>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, TransactionEntity> {
         return try {
             val offset = params.key ?: 0
-            val limit = 20
+            val limit = pageSize
 
            val data = localDataSource.getTransactionsPage(limit, offset)
 
@@ -35,7 +36,6 @@ class TransactionPagingSource @Inject constructor(
     override fun getRefreshKey(state: PagingState<Int, TransactionEntity>): Int? {
         return state.anchorPosition?.let { position ->
             state.closestPageToPosition(position)?.let { page ->
-                // повертаємо offset, бо ми використовуємо offset замість page
                 position - (position % state.config.pageSize)
             }
         }

@@ -91,7 +91,7 @@ class MainTransactionFragment : BaseFragment<FragmentMainTransactionBinding>(), 
         )
 
         lifecycleScope.launch {
-            viewModel.transactions3.collectLatest {
+            viewModel.transactions.collectLatest {
                 adapter.submitData(it)
             }
         }

@@ -3,24 +3,31 @@ package com.example.bitspender.domain.usecases.transaction
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.example.bitspender.data.models.TransactionEntity
+import androidx.paging.map
+import com.example.bitspender.data.mappers.toDomainModel
+import com.example.bitspender.domain.models.TransactionModel
 import com.example.bitspender.domain.repositories.TransactionRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class GetPagingTransactionsUseCase @Inject constructor(
     private val repository: TransactionRepository
 ) {
-    operator fun invoke(): Flow<PagingData<TransactionEntity>> {
+    operator fun invoke(pageSize:Int): Flow<PagingData<TransactionModel>> {
         return Pager(
             config = PagingConfig(
-                pageSize = 20,
+                pageSize = pageSize,
                 prefetchDistance = 5,
                 enablePlaceholders = false
             ),
             pagingSourceFactory = {
-                repository.getPagingTransaction()
+                repository.getPagingTransaction(pageSize)
             }
-        ).flow
+        ).flow.map { it ->
+            it.map {
+                it.toDomainModel()
+            }
+        }
     }
 }

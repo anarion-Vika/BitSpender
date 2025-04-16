@@ -14,5 +14,5 @@ interface TransactionRepository {
 
     suspend fun getTransactionsList(): List<TransactionModel>
 
-    fun getPagingTransaction(): PagingSource<Int, TransactionEntity>
+    fun getPagingTransaction(pageSize:Int): PagingSource<Int, TransactionEntity>
 }
