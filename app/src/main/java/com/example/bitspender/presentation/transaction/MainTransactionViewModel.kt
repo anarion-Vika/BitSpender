@@ -20,7 +20,6 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
@@ -42,12 +41,21 @@ class MainTransactionViewModel @Inject constructor(
     val uiStateFlow
         get() = _uiStateFlow.asStateFlow()
 
-
-    private val _sideEffectFlow = MutableSharedFlow<TransactionScreenEvent>(extraBufferCapacity = 1)
-    val sideEffectFlow
-        get() = _sideEffectFlow.asSharedFlow()
-
     private val refreshTrigger = MutableSharedFlow<Unit>(replay = 1)
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val transactions: StateFlow<PagingData<TransactionUiItem>> = refreshTrigger
+        .onStart { emit(Unit) }
+        .flatMapLatest {
+            getPagingTransactionsUseCase(PAGE_SIZE)
+                .map(::mapPagingData)
+                .cachedIn(viewModelScope)
+        }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.Lazily,
+            initialValue = PagingData.empty()
+        )
 
     init {
         getBalance()
@@ -79,27 +87,6 @@ class MainTransactionViewModel @Inject constructor(
         }
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    val transactions: StateFlow<PagingData<TransactionUiItem>> = refreshTrigger
-        .onStart { emit(Unit) }
-        .flatMapLatest {
-            getPagingTransactionsUseCase(PAGE_SIZE)
-                .map(::mapPagingData)
-                .cachedIn(viewModelScope)
-        }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.Lazily,
-            initialValue = PagingData.empty()
-        )
-
-
-    fun refreshPaging() {
-        viewModelScope.launch {
-            refreshTrigger.emit(Unit)
-        }
-    }
-
     private fun mapPagingData(pagingData: PagingData<TransactionModel>): PagingData<TransactionUiItem> {
         return pagingData
             .map {
@@ -114,6 +101,12 @@ class MainTransactionViewModel @Inject constructor(
                     TransactionUiItem.DateItem(afterDate)
                 } else null
             }
+    }
+
+    fun refreshPaging() {
+        viewModelScope.launch {
+            refreshTrigger.emit(Unit)
+        }
     }
 
     companion object {

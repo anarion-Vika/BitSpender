@@ -4,7 +4,6 @@ import androidx.paging.PagingSource
 import com.example.bitspender.data.local.transactions.TransactionsLocalDataSource
 import com.example.bitspender.data.mappers.toDomainModel
 import com.example.bitspender.data.mappers.toEntity
-import com.example.bitspender.data.models.TransactionEntity
 import com.example.bitspender.data.utils.TransactionPagingSource
 import com.example.bitspender.domain.models.TransactionModel
 import com.example.bitspender.domain.repositories.TransactionRepository
@@ -38,7 +37,7 @@ class TransactionRepositoryImpl @Inject constructor(
             .map { transaction -> transaction.toDomainModel() }
     }
 
-    override fun getPagingTransaction(pageSize:Int): PagingSource<Int, TransactionEntity> {
+    override fun getPagingTransaction(pageSize: Int): PagingSource<Int, TransactionModel> {
         return TransactionPagingSource(localDataSource, pageSize)
     }
 
