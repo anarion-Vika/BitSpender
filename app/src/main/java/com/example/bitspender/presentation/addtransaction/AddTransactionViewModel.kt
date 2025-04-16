@@ -17,7 +17,8 @@ import javax.inject.Inject
 class AddTransactionViewModel @Inject constructor(
     private val addTransactionUseCase: AddTransactionUseCase
 ) : ViewModel() {
-    private val _uiStateFlow = MutableStateFlow(TransactionScreenState(isLoading = true))
+
+    private val _uiStateFlow = MutableStateFlow(AddTransactionStateScreen(isLoading = true))
     val uiStateFlow
         get() = _uiStateFlow.asStateFlow()
 

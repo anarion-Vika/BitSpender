@@ -54,9 +54,6 @@ class AddTransactionFragment : BaseFragment<FragmentAddTransactionBinding>(), In
 
     private fun setUpListener() {
         with(binding) {
-            btnAddTransaction.setOnClickListener {
-
-            }
 
             etTransactionAmount.doAfterTextChanged {
                 it.toString().toDoubleOrNull()?.let { transactionAmount ->
@@ -74,7 +71,7 @@ class AddTransactionFragment : BaseFragment<FragmentAddTransactionBinding>(), In
         )
     }
 
-    private fun handleUiState(state: TransactionScreenState) {
+    private fun handleUiState(state: AddTransactionStateScreen) {
         when {
             state.isSaved -> {
                 findNavController().popBackStack()

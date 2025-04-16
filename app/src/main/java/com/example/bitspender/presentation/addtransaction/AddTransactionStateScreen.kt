@@ -1,6 +1,6 @@
 package com.example.bitspender.presentation.addtransaction
 
-data class TransactionScreenState(
+data class AddTransactionStateScreen(
     var isLoading: Boolean = false,
     var isSaved: Boolean = false,
     var error: AddTransactionError = AddTransactionError()
