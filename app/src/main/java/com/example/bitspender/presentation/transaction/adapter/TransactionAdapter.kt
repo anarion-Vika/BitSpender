@@ -4,9 +4,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.bitspender.R
 import com.example.bitspender.databinding.ItemDateBinding
 import com.example.bitspender.databinding.ItemTransactionBinding
 import com.example.bitspender.domain.models.TransactionModel
+import com.example.bitspender.presentation.utils.formatTimeToUi
+import com.example.bitspender.presentation.utils.toLocalDate
 
 class TransactionAdapter :
     PagingDataAdapter<TransactionUiItem, RecyclerView.ViewHolder>(TransactionDiffUtil()) {
@@ -37,7 +40,7 @@ class TransactionAdapter :
         when (val item = getItem(position)) {
             is TransactionUiItem.TransactionItem -> (holder as TransactionViewHolder).bind(item.transaction)
             is TransactionUiItem.DateItem -> (holder as DateSeparatorViewHolder).bind(item.date)
-            null ->  throw IllegalArgumentException("Invalid ViewHolder")
+            null -> throw IllegalArgumentException("Invalid ViewHolder")
         }
     }
 
@@ -46,8 +49,12 @@ class TransactionAdapter :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(transaction: TransactionModel) {
-            binding.tvAmount.text = "${transaction.transactionAmount} BTC"
-            binding.tvTime.text = (transaction.timestamp).toString() // форматни, як хочеш
+            val transactionAmount = binding.root.context.getString(
+                R.string.transaction_amount_format,
+                transaction.transactionAmount
+            )
+            binding.tvAmount.text = transactionAmount
+            binding.tvTime.text = (transaction.timestamp).toLocalDate().formatTimeToUi()
             binding.tvCategory.text = transaction.transactionCategory.name.lowercase()
         }
     }
@@ -59,7 +66,6 @@ class TransactionAdapter :
             binding.tvDate.text = date
         }
     }
-
 
     companion object {
         private const val TYPE_TRANSACTION = 0
