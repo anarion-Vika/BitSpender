@@ -1,7 +1,6 @@
 package com.example.bitspender.presentation.transaction
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
@@ -14,12 +13,14 @@ import com.example.bitspender.databinding.FragmentMainTransactionBinding
 import com.example.bitspender.di.utils.Injectable
 import com.example.bitspender.presentation.base.BaseFragment
 import com.example.bitspender.presentation.transaction.adapter.TransactionAdapter
+import com.example.bitspender.presentation.transaction.replenishbalance.OnReplenishBalanceListener
 import com.example.bitspender.presentation.transaction.replenishbalance.ReplenishBalanceDialogFragment
 import com.example.bitspender.presentation.utils.observeWithLifecycle
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-class MainTransactionFragment : BaseFragment<FragmentMainTransactionBinding>(), Injectable {
+class MainTransactionFragment : BaseFragment<FragmentMainTransactionBinding>(), Injectable,
+    OnReplenishBalanceListener {
 
     override val layoutResId: Int = R.layout.fragment_main_transaction
 
@@ -35,6 +36,22 @@ class MainTransactionFragment : BaseFragment<FragmentMainTransactionBinding>(), 
         setUpOnClickListeners()
         setUpAdapter()
         setupObserver()
+
+        setFragmentResultListener()
+
+    }
+
+    private fun setFragmentResultListener() {
+        parentFragmentManager.setFragmentResultListener(
+            REFRESH_TRANSACTION_KEY,
+            viewLifecycleOwner
+        ) { _, _ ->
+            viewModel.refreshPaging()
+        }
+    }
+
+    override fun onReplenishedBalance() {
+        viewModel.refreshPaging()
     }
 
     private fun setUpAdapter() {
@@ -61,7 +78,7 @@ class MainTransactionFragment : BaseFragment<FragmentMainTransactionBinding>(), 
     }
 
     private fun openReplenishDialog() {
-        ReplenishBalanceDialogFragment().show(
+        ReplenishBalanceDialogFragment(this).show(
             childFragmentManager,
             ReplenishBalanceDialogFragment::class.simpleName
         )
@@ -74,8 +91,7 @@ class MainTransactionFragment : BaseFragment<FragmentMainTransactionBinding>(), 
         )
 
         lifecycleScope.launch {
-            viewModel.transactions.collectLatest {
-                Log.d("anarion", "Submitting to adapter")
+            viewModel.transactions3.collectLatest {
                 adapter.submitData(it)
             }
         }
@@ -86,5 +102,9 @@ class MainTransactionFragment : BaseFragment<FragmentMainTransactionBinding>(), 
         binding.tvBalance.text = state.currentBalance.toString()
         binding.tvBtcRate.text = state.btcRateState
 
+    }
+
+    companion object {
+        const val REFRESH_TRANSACTION_KEY = "refreshTransactions"
     }
 }

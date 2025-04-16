@@ -3,6 +3,7 @@ package com.example.bitspender.presentation.addtransaction
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -11,6 +12,7 @@ import com.example.bitspender.databinding.FragmentAddTransactionBinding
 import com.example.bitspender.di.utils.Injectable
 import com.example.bitspender.domain.models.TransactionCategory
 import com.example.bitspender.presentation.base.BaseFragment
+import com.example.bitspender.presentation.transaction.MainTransactionFragment.Companion.REFRESH_TRANSACTION_KEY
 import com.example.bitspender.presentation.utils.observeWithLifecycle
 
 class AddTransactionFragment : BaseFragment<FragmentAddTransactionBinding>(), Injectable {
@@ -74,6 +76,7 @@ class AddTransactionFragment : BaseFragment<FragmentAddTransactionBinding>(), In
     private fun handleUiState(state: AddTransactionStateScreen) {
         when {
             state.isSaved -> {
+                parentFragmentManager.setFragmentResult(REFRESH_TRANSACTION_KEY, bundleOf())
                 findNavController().popBackStack()
             }
 

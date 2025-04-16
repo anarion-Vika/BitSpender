@@ -1,6 +1,5 @@
 package com.example.bitspender.presentation.transaction.replenishbalance
 
-import android.app.Dialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -18,7 +17,9 @@ import com.example.bitspender.di.utils.ViewModelFactory
 import com.example.bitspender.presentation.utils.observeWithLifecycle
 import javax.inject.Inject
 
-class ReplenishBalanceDialogFragment : DialogFragment(), Injectable {
+class ReplenishBalanceDialogFragment(
+    private val listener: OnReplenishBalanceListener
+) : DialogFragment(), Injectable {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
@@ -79,6 +80,7 @@ class ReplenishBalanceDialogFragment : DialogFragment(), Injectable {
     private fun handleUiState(state: ReplenishBalanceStateScreen) {
         when {
             state.isSaved -> {
+                listener.onReplenishedBalance()
                 dismiss()
             }
 
