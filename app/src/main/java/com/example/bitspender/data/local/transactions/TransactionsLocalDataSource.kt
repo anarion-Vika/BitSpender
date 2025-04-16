@@ -12,8 +12,6 @@ interface TransactionsLocalDataSource {
 
     suspend fun addTransaction(transaction: TransactionEntity)
 
-    fun getPagingTransaction(): PagingSource<Int, TransactionEntity>
-
     suspend fun getTotalCount(): Int
 
     suspend fun getTransactionsPage(limit: Int, offset: Int): List<TransactionEntity>

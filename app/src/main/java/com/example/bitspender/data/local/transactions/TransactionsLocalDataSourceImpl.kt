@@ -22,10 +22,6 @@ class TransactionsLocalDataSourceImpl @Inject constructor(
         return transactionDao.getAllAsList()
     }
 
-    override fun getPagingTransaction(): PagingSource<Int, TransactionEntity> {
-        return transactionDao.getPagedTransaction()
-    }
-
     override suspend fun getTransactionsPage(
         limit: Int,
         offset: Int
