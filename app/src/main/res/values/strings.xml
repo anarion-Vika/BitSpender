@@ -5,5 +5,6 @@
     <string name="current_btc_rate">BTC rate</string>
     <string name="add_transaction">Add transaction</string>
     <string name="transaction_amount_format">%.2f BTC</string>
+    <string name="transaction_amount">Transaction amount</string>
 
 </resources>
